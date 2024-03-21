@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/3235151c-cf33-4b06-ae94-940840689ba7/console.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/base.py" dialect="SQLite" />
+  </component>
+</project>
