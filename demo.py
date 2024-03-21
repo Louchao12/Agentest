@@ -2,6 +2,7 @@ import ast
 import encodings
 
 import generate_nonempty_power_set
+from Allbundle import Allbundle
 from GenerateRandomNumbers import GenerateRandomNumbers
 from AllSequences import AllSequences
 from CompetitiveSequence import CompetitiveSequence
@@ -18,12 +19,9 @@ if __name__ == "__main__":
     # agent_c = generator.perfect_sequence(num)
     # agent_b = [1, 2, 3, 4, 5, 6, 7, 8]
     # agent_c = [8, 7, 6, 5, 4, 3, 2, 1]
-    bundle = {1, 2, 3}
-    # 生成bundle所有子集
-    bundle_generator = generate_nonempty_power_set.generate_nonempty_power_set(bundle)
-    with open("E:\\pydemo\\Agent\\bundle.text", "w") as bundle_writer:
-        for line in bundle_generator:
-            bundle_writer.write(str(line) + '\n')
+    bundle = {4, 2, 5, 3, 9, 1}
+    bundleSequence = Allbundle(bundle)
+    bundleSequence.write_to_file("bundleSequence.text")
 
     # print(agent_b)
     # print(agent_c)
@@ -43,25 +41,23 @@ if __name__ == "__main__":
     # print("Agent B 的比赛结果:", competition_b)
     # print("Agent C 的比赛结果:", competition_c)
     # 生成 Agent 的 全排列
-    sequences_generator = AllSequences(num)
-    permutations = sequences_generator.permute()
-    with open('E:\\pydemo\\Agent\\Agent_A.text', 'w') as file_1:
-        for permutation in permutations:
-          file_1.write(str(permutation) + '\n')
-    with open('E:\\pydemo\\Agent\\Agent_A.text', 'r') as file_a, \
-                open('E:\\pydemo\\Agent\\Agent_B.tesxt', 'r') as copy_b, \
-                open('E:\\pydemo\\Agent\\Agent_C.tesxt', 'r') as copy_c,\
-                open('E:\\pydemo\\Agent\\bundle.tesxt', 'r') as bundle_writer:
-        for bundle_line in bundle_writer:
-                copy_b.seek(0)
-                for line in copy_b:
-                    copy_c.seek(0)
-                    for line1 in copy_c:
-                        agent_b = ast.literal_eval(line.rstrip('\n'))
-                        agent_c = ast.literal_eval(line1.rstrip('\n'))
-                        bundle = ast.literal_eval(bundle_line.rstrip('\n'))
-                        nums = wirteFile.wirte(agent_b, agent_c, bundle, num)
-                        deleteFile.delete_txt_files('E:\\pydemo\\Agent\\')
+    # sequences_generator = AllSequences(num)
+    # permutations = sequences_generator.permute()
+    # with open('E:\\pydemo\\Agent\\Agent_A.text', 'w') as file_1:
+    #     for permutation in permutations:
+    #       file_1.write(str(permutation) + '\n')
+    with open('E:\\pydemo\\Agent\\bundleSequence.text', 'r') as file_a, \
+            open('E:\\pydemo\\Agent\\Agent_B.tesxt', 'r') as copy_b, \
+            open('E:\\pydemo\\Agent\\Agent_C.tesxt', 'r') as copy_c:
+        # open('E:\\pydemo\\Agent\\bundle.tesxt', 'r') as bundle_writer:
+        for line in copy_b:
+            copy_c.seek(0)
+            for line1 in copy_c:
+                agent_b = ast.literal_eval(line.rstrip('\n'))
+                agent_c = ast.literal_eval(line1.rstrip('\n'))
+                # bundle = ast.literal_eval(bundle_line.rstrip('\n'))
+                nums = wirteFile.wirte(agent_b, agent_c, bundle, num)
+                deleteFile.delete_txt_files('E:\\pydemo\\Agent\\')
     # length = len(competition_b)
     # print(int(length / 2).__round__(0))
     # first_place = {}

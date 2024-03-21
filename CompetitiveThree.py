@@ -1,21 +1,25 @@
 from Tokens import Tokens
+
+
 # 这是三个人竞争的代码块，返回三个人竞争的拿取序列
 
 class CompetitiveThree:
     def __init__(self, num):
         self.num = num
 
+    # (碰撞序列，agent_b偏好，agent_c偏好，b序列，c序列，a序列，物品数)
     def competitive_n(self, sequences, person1, person2, result1, result2, boss, num):
         taken = Tokens().taken(num)
 
         i = j = k = 0
-        while i < self.num and j < self.num and k < self.num:
+        while i < self.num and j < self.num and k < self.num and sequences[k] != 0:
             if taken[0] <= 0:
                 break
 
-            while taken[0] > 0 and i < self.num and j < self.num and k < self.num:
+            while taken[0] > 0 and i < self.num and j < self.num and k < self.num and sequences[k] != 0:
                 if j < self.num and i < self.num and k < self.num and taken[person1[i]] * taken[person2[j]] * taken[
                     sequences[k]] == 0 and taken[0] > 0:
+
                     i = self.find_next_nonzero(taken, person1, i)
                     j = self.find_next_nonzero(taken, person2, j)
                     k = self.find_next_nonzero(taken, sequences, k)

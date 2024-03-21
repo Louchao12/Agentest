@@ -23,10 +23,10 @@ class wirteFile:
 
         # sequences_generator = AllSequences(num)
         # permutations = sequences_generator.permute()
-        competition_three = CompetitiveThree(num)
-        competition_a = [0] * num
-        competition_b = [0] * num
-        competition_c = [0] * num
+        competition_three = CompetitiveThree(len(bundle))
+        competition_a = [0] * len(bundle)
+        competition_b = [0] * len(bundle)
+        competition_c = [0] * len(bundle)
         # conn = pymysql.connect(  # 建立数据库的连接
         #     user='root',
         #     password='root',
@@ -52,11 +52,14 @@ class wirteFile:
         #         file_1.write(str(permutation) + '\n')
 
         # 读取Agent_A 的全排列
-        with open('E:\\pydemo\\Agent\\Agent_A.text', 'r') as file_2:
+        with open('E:\\pydemo\\Agent\\bundleSequence.text', 'r') as file_2:
             for line in file_2:
                 # 从Agent_A 文本中读取一行数据，即一种拿取顺序，并去除末尾‘\n'
                 data = ast.literal_eval(line.rstrip('\n'))
+                for i in range(num-len(bundle)):
+                    data.append(0)
                 # 调用三人竞争算法，生成每个agent 可能获得的物品
+                print(data)
                 competition_three.competitive_n(data, agent_b, agent_c, competition_b, competition_c,
                                                 competition_a, num)
                 # 生成Agent A,B,C 的获得物品集
@@ -69,9 +72,9 @@ class wirteFile:
                     file_3.write(str(competition_a) + '\n')
                     file_4.write(str(competition_b) + '\n')
                     file_5.write(str(competition_c) + '\n')
-                competition_b = [0] * num
-                competition_c = [0] * num
-                competition_a = [0] * num
+                competition_b = [0] * len(bundle)
+                competition_c = [0] * len(bundle)
+                competition_a = [0] * len(bundle)
         # cur.execute('SELECT COUNT(*) FROM permutations')
         # row_count = cur.fetchone()[0]  # Get the count of rows
         #
@@ -128,7 +131,7 @@ class wirteFile:
                 file_agent_r.write(remaining_line)
         # 这是筛选出重复的策略
         with open('E:\\pydemo\\Agent\\R.txt', 'r') as file_agent_R, \
-                open('E:\\pydemo\\Agent\\Agent_A.text', 'r') as file_agent_A, \
+                open('E:\\pydemo\\Agent\\bundleSequence.text', 'r') as file_agent_A, \
                 open('E:\\pydemo\\Agent\\res.txt', 'a') as file_agent_res:
             file_agent_A.seek(0)
             texts = set()
