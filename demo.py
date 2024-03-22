@@ -21,8 +21,7 @@ if __name__ == "__main__":
     # agent_c = [8, 7, 6, 5, 4, 3, 2, 1]
 
     bundle = {4, 2, 5, 3, 9, 1}
-    bundleSequence = Allbundle(bundle)
-    bundleSequence.write_to_file("bundleSequence.text")
+
 
     # print(agent_b)
     # print(agent_c)
@@ -47,8 +46,7 @@ if __name__ == "__main__":
     # with open('E:\\pydemo\\Agent\\Agent_A.text', 'w') as file_1:
     #     for permutation in permutations:
     #       file_1.write(str(permutation) + '\n')
-    with open('E:\\pydemo\\Agent\\bundleSequence.text', 'r') as file_a, \
-            open('E:\\pydemo\\Agent\\Agent_B.tesxt', 'r') as copy_b, \
+    with open('E:\\pydemo\\Agent\\Agent_B.tesxt', 'r') as copy_b, \
             open('E:\\pydemo\\Agent\\Agent_C.tesxt', 'r') as copy_c:
         # open('E:\\pydemo\\Agent\\bundle.tesxt', 'r') as bundle_writer:
         for line in copy_b:

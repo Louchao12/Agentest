@@ -3,6 +3,7 @@ import ast
 import pymysql
 
 from AllSequences import AllSequences
+from Allbundle import Allbundle
 from CompetitiveThree import CompetitiveThree
 from Revenue import Revenue
 
@@ -50,13 +51,14 @@ class wirteFile:
         # with open('E:\\pydemo\\Agent\\Agent_A.txt', 'w') as file_1:
         #     for permutation in permutations:
         #         file_1.write(str(permutation) + '\n')
-
+        bundleSequence = Allbundle(set(bundle))
+        bundleSequence.write_to_file("bundleSequence.text")
         # 读取Agent_A 的全排列
         with open('E:\\pydemo\\Agent\\bundleSequence.text', 'r') as file_2:
             for line in file_2:
                 # 从Agent_A 文本中读取一行数据，即一种拿取顺序，并去除末尾‘\n'
                 data = ast.literal_eval(line.rstrip('\n'))
-                for i in range(num-len(bundle)):
+                for i in range(num - len(bundle)):
                     data.append(0)
                 # 调用三人竞争算法，生成每个agent 可能获得的物品
                 competition_three.competitive_n(data, agent_b, agent_c, competition_b, competition_c,
@@ -98,6 +100,7 @@ class wirteFile:
         # conn.close()
 
         MaxValue = 0.0
+        MaxVector = 0
         with (open('E:\\pydemo\\Agent\\ThreeAgent_A.txt', 'r') as file_agent_a1, \
               open('E:\\pydemo\\Agent\\ThreeAgent_B.txt', 'r') as file_agent_b1, \
               open('E:\\pydemo\\Agent\\ThreeAgent_C.txt', 'r') as file_agent_c1, \
@@ -111,14 +114,16 @@ class wirteFile:
                 file_result1.write('bundle:' + str(bundle) + 'Bs:' + str(agent_b) + 'Cs:' + str(agent_c) + 'A:' + str(
                     data_a) + 'B:' + str(data_b) + 'C:' + str(data_c) + '\n')
                 revenue = Revenue()
-                vector = [0, 0, 0]
                 res = [0] * len(data_a)
-                E = revenue.compute_revenue(data_a, data_b, data_c, res, bundle, vector)
+                vector = 0
+                E, vector = revenue.compute_revenue(data_a, data_b, data_c, res, bundle, vector)
                 if E > MaxValue:
                     MaxValue = E
+                if vector > MaxVector:
+                    MaxVector = vector
                 with open('E:\\pydemo\\Agent\\revenue.txt', 'a') as file_agent_revenue:
-                    file_agent_revenue.write("收益为： " + str(E) + " 收益向量为：" + str(res)  + "收益矩阵为：" + str(vector)+ '\n')
-
+                    file_agent_revenue.write(
+                        "收益为： " + str(E) + " 收益向量为：" + str(res) + "收益矩阵为：" + str(vector) + '\n')
         with open('E:\\pydemo\\Agent\\result.txt', 'r') as file_agent_result, \
                 open('E:\\pydemo\\Agent\\revenue.txt', 'r') as file_agent_revenue, \
                 open('E:\\pydemo\\Agent\\R.txt', 'a') as file_agent_r:
@@ -153,30 +158,81 @@ class wirteFile:
                     data = float(line[index + 5:index + 8])
                     if data == MaxValue:
                         file_agent_maxvalue.write(line)
+                # 将符合条件的行写入到目标文件中
 
-        with open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as file_agent_res:
-            lines = file_agent_res.readlines()
-
-            # 初始化数据列表
-            data = []
+        with open('maxvalue.txt', 'r') as file_agent_maxvalue:
+            lines = file_agent_maxvalue.readlines()
+        with open('M.text', 'a') as file_agent_maxvalue_text:
+            print("最高收益向量为：" + str(MaxVector))
             for line in lines:
                 index = line.find("收益矩阵为：")
                 if index != -1:  # 确保找到了"收益矩阵"
                     # 直接添加"收益矩阵"之后的字符串，不包含原始行
-                    data.append(line[index + 6:].strip())
+                    data = int(line[index + 6:].rstrip('\n'))
+                    if data == MaxVector:
+                        file_agent_maxvalue_text.write(line)
 
+        # with open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as file_agent_res:
+        #     lines = file_agent_res.readlines()
+        #
+        #     # 初始化数据列表
+        #     data = []
+        #     for line in lines:
+        #         index = line.find("收益矩阵为：")
+        #         if index != -1:  # 确保找到了"收益矩阵"
+        #             # 直接添加"收益矩阵"之后的字符串，不包含原始行
+        #             data.append(line[index + 6:].strip())
+        #
+        #
+        #     # 按照降序排序
+        #     data.sort(reverse=True)
+        #     max_vector = ast.literal_eval(data[0].rstrip('\n'))
+        # with open('E:\\pydemo\\Agent\\M.text', 'a') as file_agent_res,\
+        #         open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as f:
+        #     lines = f.readlines()
+        #     print('最高收益向量为：'+ str(max_vector))
+        #     for line in lines:
+        #         index = line.find("收益矩阵为：")
+        #         if index != -1:  # 确保找到了"收益矩阵"
+        #             # 直接添加"收益矩阵"之后的字符串，不包含原始行
+        #             temp = ast.literal_eval(line[index + 6:].rstrip('\n'))
+        #             if temp == max_vector:
+        #                 file_agent_res.write(line)
 
-            # 按照降序排序
-            data.sort(reverse=True)
-            max_vector = ast.literal_eval(data[0].rstrip('\n'))
-        with open('E:\\pydemo\\Agent\\M.tesxt', 'a') as file_agent_res,\
-                open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as f:
-            lines = f.readlines()
-            print('最高收益向量为：'+ str(max_vector))
-            for line in lines:
-                index = line.find("收益矩阵为：")
-                if index != -1:  # 确保找到了"收益矩阵"
-                    # 直接添加"收益矩阵"之后的字符串，不包含原始行
-                    temp = ast.literal_eval(line[index + 6:].rstrip('\n'))
-                    if temp == max_vector:
-                        file_agent_res.write(line)
+        # max_list = None
+        # max_value = float('-inf')  # 初始化为负无穷大
+        #
+        # with open('maxvalue.txt', 'r') as file_agent_res:
+        #     lines = file_agent_res.readlines()
+        #
+        #     # 遍历文件中的每一行
+        #     for line in lines:
+        #         index = line.find("收益矩阵为：")
+        #         if index != -1:  # 如果找到了包含特定字符串的行
+        #             data_str = line[index + 6:].strip()
+        #             data_list = ast.literal_eval(data_str)  # 将字符串转换为列表
+        #
+        #             # 将字符串列表转换为整数列表
+        #             data_list = [int(x) for x in data_list]
+        #
+        #             # 检查该列表中的最大值
+        #             current_max = max(data_list)
+        #
+        #             # 如果当前列表中的最大值大于记录的最大值，则更新记录的最大值和列表
+        #             if current_max > max_value:
+        #                 max_value = current_max
+        #                 max_list = data_list
+        #
+        # # max_list 现在包含具有最大值的列表
+        # max_vector = max_list
+        # with open('E:\\pydemo\\Agent\\M.text', 'a') as file_agent_res, \
+        #         open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as f:
+        #     lines = f.readlines()
+        #     print('最高收益向量为：' + str(max_vector))
+        #     for line in lines:
+        #         index = line.find("收益矩阵为：")
+        #         if index != -1:  # 确保找到了"收益矩阵"
+        #             # 直接添加"收益矩阵"之后的字符串，不包含原始行
+        #             temp = ast.literal_eval(line[index + 6:].rstrip('\n'))
+        #             if temp == max_vector:
+        #                 file_agent_res.write(line)
