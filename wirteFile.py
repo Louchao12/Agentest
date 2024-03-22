@@ -59,7 +59,6 @@ class wirteFile:
                 for i in range(num-len(bundle)):
                     data.append(0)
                 # 调用三人竞争算法，生成每个agent 可能获得的物品
-                print(data)
                 competition_three.competitive_n(data, agent_b, agent_c, competition_b, competition_c,
                                                 competition_a, num)
                 # 生成Agent A,B,C 的获得物品集
@@ -146,7 +145,7 @@ class wirteFile:
             lines = file_agent_res.readlines()
 
         # 将符合条件的行写入到目标文件中
-        with open('E:\\pydemo\\Agent\\maxvalue.text', 'a') as file_agent_maxvalue:
+        with open('E:\\pydemo\\Agent\\maxvalue.txt', 'a') as file_agent_maxvalue:
             print("最高收益为：" + str(MaxValue))
             for line in lines:
                 index = line.find("收益为：")
@@ -154,3 +153,30 @@ class wirteFile:
                     data = float(line[index + 5:index + 8])
                     if data == MaxValue:
                         file_agent_maxvalue.write(line)
+
+        with open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as file_agent_res:
+            lines = file_agent_res.readlines()
+
+            # 初始化数据列表
+            data = []
+            for line in lines:
+                index = line.find("收益矩阵为：")
+                if index != -1:  # 确保找到了"收益矩阵"
+                    # 直接添加"收益矩阵"之后的字符串，不包含原始行
+                    data.append(line[index + 6:].strip())
+
+
+            # 按照降序排序
+            data.sort(reverse=True)
+            max_vector = ast.literal_eval(data[0].rstrip('\n'))
+        with open('E:\\pydemo\\Agent\\M.tesxt', 'a') as file_agent_res,\
+                open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as f:
+            lines = f.readlines()
+            print('最高收益向量为：'+ str(max_vector))
+            for line in lines:
+                index = line.find("收益矩阵为：")
+                if index != -1:  # 确保找到了"收益矩阵"
+                    # 直接添加"收益矩阵"之后的字符串，不包含原始行
+                    temp = ast.literal_eval(line[index + 6:].rstrip('\n'))
+                    if temp == max_vector:
+                        file_agent_res.write(line)
