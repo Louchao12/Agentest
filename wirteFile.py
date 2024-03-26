@@ -24,10 +24,10 @@ class wirteFile:
 
         # sequences_generator = AllSequences(num)
         # permutations = sequences_generator.permute()
-        competition_three = CompetitiveThree(len(bundle))
-        competition_a = [0] * len(bundle)
-        competition_b = [0] * len(bundle)
-        competition_c = [0] * len(bundle)
+        competition_three = CompetitiveThree(num)
+        competition_a = [0] * num
+        competition_b = [0] * num
+        competition_c = [0] * num
         # conn = pymysql.connect(  # 建立数据库的连接
         #     user='root',
         #     password='root',
@@ -61,6 +61,7 @@ class wirteFile:
                 for i in range(num - len(bundle)):
                     data.append(0)
                 # 调用三人竞争算法，生成每个agent 可能获得的物品
+                # print(data)
                 competition_three.competitive_n(data, agent_b, agent_c, competition_b, competition_c,
                                                 competition_a, num)
                 # 生成Agent A,B,C 的获得物品集
@@ -73,9 +74,9 @@ class wirteFile:
                     file_3.write(str(competition_a) + '\n')
                     file_4.write(str(competition_b) + '\n')
                     file_5.write(str(competition_c) + '\n')
-                competition_b = [0] * len(bundle)
-                competition_c = [0] * len(bundle)
-                competition_a = [0] * len(bundle)
+                competition_b = [0] * num
+                competition_c = [0] * num
+                competition_a = [0] * num
         # cur.execute('SELECT COUNT(*) FROM permutations')
         # row_count = cur.fetchone()[0]  # Get the count of rows
         #
@@ -99,8 +100,8 @@ class wirteFile:
         # cur.close()
         # conn.close()
 
-        MaxValue = 0.0
-        MaxVector = 0
+        MaxValue = 0.00
+        MaxVector = 0.0
         with (open('E:\\pydemo\\Agent\\ThreeAgent_A.txt', 'r') as file_agent_a1, \
               open('E:\\pydemo\\Agent\\ThreeAgent_B.txt', 'r') as file_agent_b1, \
               open('E:\\pydemo\\Agent\\ThreeAgent_C.txt', 'r') as file_agent_c1, \
@@ -155,7 +156,8 @@ class wirteFile:
             for line in lines:
                 index = line.find("收益为：")
                 if index != -1:
-                    data = float(line[index + 5:index + 8])
+                    data = float(line[index + 5:index + 9])
+                    # print(data)
                     if data == MaxValue:
                         file_agent_maxvalue.write(line)
                 # 将符合条件的行写入到目标文件中
@@ -168,7 +170,8 @@ class wirteFile:
                 index = line.find("收益矩阵为：")
                 if index != -1:  # 确保找到了"收益矩阵"
                     # 直接添加"收益矩阵"之后的字符串，不包含原始行
-                    data = int(line[index + 6:].rstrip('\n'))
+                    data = int(line[index + 6:])
+                    # print(data)
                     if data == MaxVector:
                         file_agent_maxvalue_text.write(line)
 

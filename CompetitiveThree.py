@@ -1,31 +1,36 @@
+# -*- coding: utf-8 -*-
 from Tokens import Tokens
 
 
-# ÕâÊÇÈı¸öÈË¾ºÕùµÄ´úÂë¿é£¬·µ»ØÈı¸öÈË¾ºÕùµÄÄÃÈ¡ĞòÁĞ
+# è¿™æ˜¯ä¸‰ä¸ªäººç«äº‰çš„ä»£ç å—ï¼Œè¿”å›ä¸‰ä¸ªäººç«äº‰çš„æ‹¿å–åºåˆ—
 
 class CompetitiveThree:
     def __init__(self, num):
-        self.num = num
+        num = num
 
-    # (Åö×²ĞòÁĞ£¬agent_bÆ«ºÃ£¬agent_cÆ«ºÃ£¬bĞòÁĞ£¬cĞòÁĞ£¬aĞòÁĞ£¬ÎïÆ·Êı)
+    # (ç¢°æ’åºåˆ—ï¼Œagent_båå¥½ï¼Œagent_cåå¥½ï¼Œbåºåˆ—ï¼Œcåºåˆ—ï¼Œaåºåˆ—ï¼Œç‰©å“æ•°)
     def competitive_n(self, sequences, person1, person2, result1, result2, boss, num):
         taken = Tokens().taken(num)
 
         i = j = k = 0
-        while i < self.num and j < self.num and k < self.num and sequences[k] != 0:
+        while i < num and j < num and k < num and sequences[k] != 0:
             if taken[0] <= 0:
                 break
-
-            while taken[0] > 0 and i < self.num and j < self.num and k < self.num and sequences[k] != 0:
-                if j < self.num and i < self.num and k < self.num and taken[person1[i]] * taken[person2[j]] * taken[
+            # å‰©ä½™ç‰©å“ > 0,å¹¶ä¸”index < num
+            while taken[0] > 0 and i < num and j < num and k < num and sequences[k] != 0:
+                # å¦‚æœç¬¬iä¸ªç‰©å“è¢«æ‹¿å–äº†ï¼Œå°±æŠ¥ä¸‹ä¸€ä¸ª
+                if j < num and i < num and k < num and taken[person1[i]] * taken[person2[j]] * taken[
                     sequences[k]] == 0 and taken[0] > 0:
 
-                    i = self.find_next_nonzero(taken, person1, i)
-                    j = self.find_next_nonzero(taken, person2, j)
-                    k = self.find_next_nonzero(taken, sequences, k)
+                    while i < num and taken[person1[i]] == 0 and taken[0] > 0:
+                        i = i + 1
+                    while j < num and taken[person2[j]] == 0 and taken[0] > 0:
+                        j = j + 1
+                    while k < num and taken[sequences[k]] == 0 and taken[0] > 0:
+                        k = k + 1
 
-                    if j < self.num and i < self.num and k < self.num and person1[i] == person2[j] and person1[i] == \
-                            sequences[k] and person2[j] == sequences[k] and taken[0] > 0:
+                    # index < num && ä¸‰äººç”³æŠ¥ç‰©å“ç›¸ç­‰ï¼Œä¸”å‰©ä½™ç‰©å“ > 0
+                    if j < num and i < num and k < num and person1[i] == person2[j] == sequences[k] and taken[0] > 0:
                         result1[i] = person1[i]
                         result2[j] = person2[j]
                         boss[k] = sequences[k]
@@ -33,7 +38,7 @@ class CompetitiveThree:
                         taken[0] -= 1
                         break
 
-                    if j < self.num and i < self.num and k < self.num and person1[i] != person2[j] and person1[i] != \
+                    if j < num and i < num and k < num and person1[i] != person2[j] and person1[i] != \
                             sequences[k] and person2[j] != sequences[k] and taken[0] > 0:
                         result1[i] = person1[i]
                         result2[j] = person2[j]
@@ -44,7 +49,7 @@ class CompetitiveThree:
                         taken[0] -= 3
                         break
 
-                    if j < self.num and i < self.num and k < self.num and person1[i] == person2[j] and person1[i] != \
+                    if j < num and i < num and k < num and person1[i] == person2[j] and person1[i] != \
                             sequences[k] and taken[0] > 0:
                         result2[j] = person2[j]
                         result1[i] = person1[i]
@@ -54,7 +59,7 @@ class CompetitiveThree:
                         taken[0] -= 2
                         break
 
-                    if j < self.num and i < self.num and k < self.num and person1[i] != person2[j] and person1[i] == \
+                    if j < num and i < num and k < num and person1[i] != person2[j] and person1[i] == \
                             sequences[k] and taken[0] > 0:
                         result1[i] = person1[i]
                         result2[j] = person2[j]
@@ -64,7 +69,7 @@ class CompetitiveThree:
                         taken[0] -= 2
                         break
 
-                    if j < self.num and i < self.num and k < self.num and person1[i] != person2[j] and person2[j] == \
+                    if j < num and i < num and k < num and person1[i] != person2[j] and person2[j] == \
                             sequences[k] and taken[0] > 0:
                         result1[i] = person1[i]
                         result2[j] = person2[j]
@@ -74,7 +79,8 @@ class CompetitiveThree:
                         taken[0] -= 2
                         break
 
-                if j < self.num and i < self.num and k < self.num and taken[person1[i]] * taken[person2[j]] * taken[
+                # å¦‚æœç”³æŠ¥ç‰©å“å…¨éƒ½è¿˜åœ¨ï¼Œå¹¶ä¸”ä¸‰ä¸ªäººæŠ¥çš„ç‰©å“å…¨ä¸ç›¸åŒ
+                if j < num and i < num and k < num and taken[person1[i]] * taken[person2[j]] * taken[
                     sequences[k]] != 0 and person1[i] != person2[j] and person1[i] != sequences[k] and person2[j] != \
                         sequences[k] and taken[0] > 0:
                     result1[i] = person1[i]
@@ -86,7 +92,7 @@ class CompetitiveThree:
                     taken[0] -= 3
                     break
 
-                if j < self.num and i < self.num and k < self.num and taken[person1[i]] * taken[person2[j]] != 0 and \
+                if j < num and i < num and k < num and taken[person1[i]] * taken[person2[j]] != 0 and \
                         person1[i] == person2[j] and person1[i] == sequences[k] and person2[j] == sequences[k] and \
                         taken[0] > 0:
                     result1[i] = person1[i]
@@ -96,7 +102,7 @@ class CompetitiveThree:
                     taken[0] -= 1
                     break
 
-                if j < self.num and i < self.num and k < self.num and person1[i] == person2[j] and person1[i] != \
+                if j < num and i < num and k < num and person1[i] == person2[j] and person1[i] != \
                         sequences[k] and taken[0] > 0:
                     result2[j] = person2[j]
                     result1[i] = person1[i]
@@ -106,7 +112,7 @@ class CompetitiveThree:
                     taken[0] -= 2
                     break
 
-                if j < self.num and i < self.num and k < self.num and person1[i] != person2[j] and person1[i] == \
+                if j < num and i < num and k < num and person1[i] != person2[j] and person1[i] == \
                         sequences[k] and taken[0] > 0:
                     result1[i] = person1[i]
                     result2[j] = person2[j]
@@ -116,7 +122,7 @@ class CompetitiveThree:
                     taken[0] -= 2
                     break
 
-                if j < self.num and i < self.num and k < self.num and person1[i] != person2[j] and person2[j] == \
+                if j < num and i < num and k < num and person1[i] != person2[j] and person2[j] == \
                         sequences[k] and taken[0] > 0:
                     result1[i] = person1[i]
                     result2[j] = person2[j]
@@ -126,7 +132,4 @@ class CompetitiveThree:
                     taken[0] -= 2
                     break
 
-    def find_next_nonzero(self, taken, person, index):
-        while index < self.num and taken[person[index]] == 0 and taken[0] > 0:
-            index += 1
-        return index
+

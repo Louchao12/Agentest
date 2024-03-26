@@ -11,7 +11,8 @@ import random
 class CreatPerfect:
     @staticmethod
     def write_random_permutations(num_permutations, filename):
-        nums = list(range(1, 11))  # 生成 1 到 20 的列表
+        num = 14
+        nums = list(range(1, num + 1))  # 生成 1 到 20 的列表
         with open(filename, "w") as f:
             # 逐个生成排列并写入文件
             for _ in range(num_permutations):
@@ -20,10 +21,10 @@ class CreatPerfect:
 
 
 if __name__ == "__main__":
-    CreatPerfect.write_random_permutations(10, "Agent_C.tesxt")
+    CreatPerfect.write_random_permutations(100, "Agent_C.tesxt")
 
 if __name__ == "__main__":
-    n = 10
+    n = 14
     num_list = [i for i in range(1, n + 1)]
     with open("Agent_B.tesxt", "w") as f:
         f.write(str(num_list) + '\n')
