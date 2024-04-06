@@ -13,14 +13,14 @@ from thingsFirstPlace import thingsFirstPlace
 from wirteFile import wirteFile
 
 if __name__ == "__main__":
-    num = 14
+    num = 16
     # generator = GenerateRandomNumbers()
     # agent_b = generator.perfect_sequence(num)
     # agent_c = generator.perfect_sequence(num)
     # agent_b = [1, 2, 3, 4, 5, 6, 7, 8]
     # agent_c = [8, 7, 6, 5, 4, 3, 2, 1]
 
-    bundle = {2,3,4,5,10,11,14}
+    bundle = {1,2,3,4,13,14,15,16}
 
     # print(agent_b)
     # print(agent_c)

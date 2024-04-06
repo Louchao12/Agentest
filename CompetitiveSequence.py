@@ -2,7 +2,7 @@ from Tokens import Tokens
 # 这是计算两个人竞争的代码块，输出两个人竞争后的竞争序列
 
 class CompetitiveSequence:
-    def compete(self, person1, person2, result1, result2, num):
+    def compete(person1, person2, result1, result2, num):
         taken = Tokens().taken(num)
 
         i = j = 0

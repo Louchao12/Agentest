@@ -164,7 +164,9 @@ class wirteFile:
 
         with open('maxvalue.txt', 'r') as file_agent_maxvalue:
             lines = file_agent_maxvalue.readlines()
-        with open('M.text', 'a') as file_agent_maxvalue_text:
+        with open('M.text', 'a') as file_agent_maxvalue_text, \
+                open('three_C.text', 'a') as three_C_text:
+
             print("最高收益向量为：" + str(MaxVector))
             for line in lines:
                 index = line.find("收益矩阵为：")
@@ -174,6 +176,8 @@ class wirteFile:
                     # print(data)
                     if data == MaxVector:
                         file_agent_maxvalue_text.write(line)
+                        if (data - 1) % 10 == 0:
+                            three_C_text.write(line)
 
         # with open('E:\\pydemo\\Agent\\maxvalue.txt', 'r') as file_agent_res:
         #     lines = file_agent_res.readlines()
