@@ -1,5 +1,5 @@
 import ast
-
+# -*- coding: utf-8 -*-
 from CompetitiveThree import CompetitiveThree
 from Revenue import Revenue
 from thingsFirstPlace import thingsFirstPlace
@@ -33,45 +33,79 @@ def OA(num, bundle, Agent_b, Agent_c):
     site = []
     tokens = set(range(1, num + 1))
     print(tokens)
-    for i in range(len(bundle)):
-        o = []
-        index_b = Agent_b.index(bundle[i])
-        index_c = Agent_c.index(bundle[i])
-        gap = abs(index_b - index_c)
-        o.append(bundle[i])
-        o.append(gap)
-        site.append(o)
-    print(site)
 
     i = j = 0
     while tokens:
+        choose = []
+        N = N + 1
         while i < num and j < num:
+            # 确定b，c所选物品
             if Agent_b[i] in tokens and Agent_c[j] in tokens:
                 o_b = Agent_b[i]
                 o_c = Agent_c[j]
+                if i + 1 < num and j + 1 < num:
+                    o_b_link = Agent_b[i + 1]
+                    o_c_link = Agent_c[j + 1]
+                else:
+                    o_b_link = None
+                    o_c_link = None
                 tokens.discard(Agent_b[i])
                 tokens.discard(Agent_c[j])
-                print(o_b, o_c)
+                k = i + 1
+                q = j + 1
+                o_b_next = None
+                o_c_next = None
+                while k < num and q < num:
+                    if Agent_b[k] in tokens and Agent_c[q] in tokens:
+                        o_b_next = Agent_b[k]
+                        o_c_next = Agent_c[q]
+
+                        break
+                    if Agent_b[k] not in tokens:
+                        k = k + 1
+                    if Agent_c[q] not in tokens:
+                        q = q + 1
+
                 i = j = 0
                 break
             if Agent_b[i] not in tokens:
                 i = i + 1
             if Agent_c[j] not in tokens:
                 j = j + 1
+
+            # 如果b，c报的都是目标物品
         if o_b in bundle and o_c in bundle:
-            N = N + 1
+            # 如果b，c报的物品不相同
             if o_b != o_c:
+                # 栈中存在缓冲物品
                 if len(stack) > 0:
-                    b_site = next((index for index, sublist in enumerate(site) if sublist[0] == o_b), None)
-                    c_site = next((index for index, sublist in enumerate(site) if sublist[0] == o_c), None)
-                    if site[b_site][1] >= site[c_site][1]:
-                        o_a.append(o_b)
+                    # ob后的物品不为空
+                    if o_b_next is not None:
+                        # ob的下一个物品是目标物品
+                        if o_b_next in bundle:
+                            # oc的下一个物品不是目标物品
+                            if o_c_next not in bundle:
+                                choose = [o_b, N]
+                                o_a.append(choose)
+                                tokens.add(o_c)
+                                stack.pop()
+                                continue
+                    if o_b == o_c_link:
+                        choose = [o_b, N]
+                        o_a.append(choose)
                         tokens.add(o_c)
                         stack.pop()
                         continue
+                    if o_c == o_b_link:
+                        choose = [o_c, N]
+                        o_a.append(choose)
+                        tokens.add(o_b)
+                        stack.pop()
+                        continue
                     else:
-                        o_a.append(o_b)
-                        tokens.add(o_c)
+                        choose = [o_c, N]
+                        o_a.append(choose)
+                        tokens.add(o_b)
                         stack.pop()
                         continue
                 else:
@@ -79,18 +113,15 @@ def OA(num, bundle, Agent_b, Agent_c):
                     stack.append(o)
                     continue
             if o_b == o_c:
-                if len(stack) > 0:
-                    o_a.append(o_b)
-                    stack.pop()
-                    continue
-                else:
-                    o = [o_b, o_c, N]
-                    stack.append(o)
-                    continue
+                o = [o_b, o_c, N]
+                stack.append(o)
+                continue
+        # 如果b选择了目标物品
         if o_b in bundle:
             N = N + 1
             if len(stack) > 0:
-                o_a.append(o_b)
+                choose = [o_b, N]
+                o_a.append(choose)
                 tokens.add(o_c)
                 stack.pop()
                 continue
@@ -98,10 +129,12 @@ def OA(num, bundle, Agent_b, Agent_c):
                 o = [o_b, o_c, N]
                 stack.append(o)
                 continue
+        # 如果c选择了目标物品
         if o_c in bundle:
             N = N + 1
             if len(stack) > 0:
-                o_a.append(o_c)
+                choose = [o_c, N]
+                o_a.append(choose)
                 tokens.add(o_b)
                 stack.pop()
                 continue
@@ -109,25 +142,85 @@ def OA(num, bundle, Agent_b, Agent_c):
                 o = [o_b, o_c, N]
                 stack.append(o)
                 continue
+        # 如果都没选择目标物品
         if o_b not in bundle and o_c not in bundle:
             o = [o_b, o_c, -1]
             stack.append(o)
-    if stack:
-        o = stack[0]
-        if o[2] != -1:
-            if o[0] in bundle:
-                o_a.insert(o[2] - 1, o[0])
-            else:
-                o_a.insert(o[2] - 1, o[1])
+    same_thing = 0
+    if len(stack) > 0:
+        stack_temp=[]
+        for i in range(len(stack)):
+            o = stack[i]
+            if o[2] == -1:
+                continue
+            if o[0] == o[1]:
+                stack_temp.append(o)
+                same_thing = same_thing + 1
+            if o[0] != o[1]:
+                stack_temp.append(o)
+        if len(stack_temp) > 0:
+            o = stack_temp[0]
+            if o[0] == o[1]:
+                same_thing = same_thing - 1
+            same_thing = same_thing % 2
+            oa_temp = switch(same_thing,stack_temp,bundle)
+            o_a = o_a + oa_temp
+            o_a.sort(key=lambda x: x[1])
+            OA = []
+            for i in range(len(o_a)):
+                o = o_a[i]
+                OA.append(o[0])
         else:
-            return o_a
-    return o_a
+            o_a.sort(key=lambda x: x[1])
+            OA = []
+            for i in range(len(o_a)):
+                o = o_a[i]
+                OA.append(o[0])
+    else:
+        o_a.sort(key=lambda x: x[1])
+        OA = []
+        for i in range(len(o_a)):
+            o = o_a[i]
+            OA.append(o[0])
+    return OA
+
+
+def switch(case, stack, bundle):
+    match case:
+        case 0:
+            o_a_temp = []
+            o = stack[0]
+            if o[0] in bundle:
+                choose_1 = o[0]
+            else:
+                choose_1 = o[1]
+            choose = [choose_1, o[2]]
+            o_a_temp.append(choose)
+            stack.remove(o)
+            if len(stack) < 2:
+                return o_a_temp
+            else:
+                for i in range(1,len(stack),2):
+                    choose = [stack[i][0], stack[i][2]]
+                    o_a_temp.append(choose)
+            return o_a_temp
+        case 1:
+            o_a_temp = []
+            for i in range(1, len(stack), 2):
+                o = stack[i]
+                if o[0] in bundle:
+                    choose_1 = o[0]
+                else:
+                    choose_1 = o[1]
+                choose = [choose_1, stack[i][2]]
+                o_a_temp.append(choose)
+            return o_a_temp
 
 
 if __name__ == '__main__':
     num = 5
-    bundle = [1,2,3,4]
-    Agent_b = [4,1,2,3]
-    Agent_c = [1,2,3,4]
-    o_a=OA(num, bundle, Agent_b, Agent_c)
+    bundle = [1, 2, 3]
+    Agent_b = [1,2,3,4,5]
+    Agent_c = [1,4,3,2,5]
+    o_a = OA(num, bundle, Agent_b, Agent_c)
     print(o_a)

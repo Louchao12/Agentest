@@ -13,14 +13,14 @@ from thingsFirstPlace import thingsFirstPlace
 from wirteFile import wirteFile
 
 if __name__ == "__main__":
-    num = 16
+    num =6
     # generator = GenerateRandomNumbers()
     # agent_b = generator.perfect_sequence(num)
     # agent_c = generator.perfect_sequence(num)
     # agent_b = [1, 2, 3, 4, 5, 6, 7, 8]
     # agent_c = [8, 7, 6, 5, 4, 3, 2, 1]
 
-    bundle = {1,2,3,4,13,14,15,16}
+    bundle = {1,2,6}
 
     # print(agent_b)
     # print(agent_c)
@@ -54,7 +54,8 @@ if __name__ == "__main__":
                 agent_b = ast.literal_eval(line.rstrip('\n'))
                 agent_c = ast.literal_eval(line1.rstrip('\n'))
                 # bundle = ast.literal_eval(bundle_line.rstrip('\n'))
-                nums = wirteFile.wirte(agent_b, agent_c, bundle, num)
+                nums1= wirteFile.write(agent_b, agent_c, bundle, num)
+
                 deleteFile.delete_txt_files('E:\\pydemo\\Agent\\')
     # length = len(competition_b)
     # print(int(length / 2).__round__(0))
